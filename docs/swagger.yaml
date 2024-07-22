@@ -1,0 +1,200 @@
+definitions:
+  payload.AppResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+  payload.CreateTaskRequest:
+    properties:
+      description:
+        type: string
+      imageUrl:
+        type: string
+      status:
+        type: integer
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  payload.ErrResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+  payload.UpdateTaskRequest:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      imageUrl:
+        type: string
+      status:
+        type: integer
+      title:
+        type: string
+    required:
+    - status
+    - title
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: A Tasks service API in Go using Gin framework
+  title: Tasks Service API
+  version: "1.0"
+paths:
+  /files/upload:
+    post:
+      description: Upload a file to get link get media
+      parameters:
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payload.AppResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+      summary: Upload a file
+  /tasks:
+    delete:
+      description: Remove a task by id in DB.
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payload.AppResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+      summary: Remove a task by id
+      tags:
+      - tasks
+    get:
+      description: Return list of tasks.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payload.AppResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+      summary: Get all tasks
+      tags:
+      - tasks
+    post:
+      description: Save task data in Db.
+      parameters:
+      - description: create task request
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/payload.CreateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+      summary: Create tasks
+      tags:
+      - tasks
+  /tasks/{id}:
+    get:
+      description: Get a task by id from path variable named id from DB.
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+      summary: Get a task by id
+      tags:
+      - tasks
+    put:
+      description: Update  a task by id.
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update task request
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/payload.UpdateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payload.AppResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ErrResponse'
+      summary: Update a task by id
+      tags:
+      - tasks
+swagger: "2.0"
