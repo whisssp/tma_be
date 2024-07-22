@@ -5,7 +5,7 @@
 3. Use redis for caching
 
 ## API docs
-- Local: `http://localhost:8080/swagger-ui/index.html`
+- Local: `http://localhost:8080/docs/index.html`
 
 ## Run application:
 - Command: `go run ./cmd/main.go`
